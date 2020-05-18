@@ -11,12 +11,17 @@ services:
             MYSQL_ROOT_PASSWORD: root
         volumes:
         - ./mysql:/var/lib/mysql
+        networks: 
+            - database
+        container_name: mysql_db
     
     adminer:
         image: adminer
         restart: on-failure
         ports:
-        - "9030:9030"
+            - "9030:9030"
+        networks: 
+            - database
 
     nodejs:
         build: ./apiNodejs/
@@ -24,6 +29,11 @@ services:
             - ./apiNodejs/:/user/src/app
         ports:
             - '3000:3000'
-        links: 
-            - db
-            - adminer
+            - '3001:3360'
+        networks: 
+            - database
+        restart: on-failure
+
+networks:
+    database:
+        driver: bridge

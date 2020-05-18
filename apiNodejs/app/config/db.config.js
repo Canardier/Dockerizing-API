@@ -1,7 +1,7 @@
 module.exports = {
-    HOST: "localhost",
+    HOST: "mysql_db",
     USER: "root",
     PASSWORD: "root",
     DB: "mydb",
-    PORT: 3360
+    PORT: 3306
 };
