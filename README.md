@@ -1,10 +1,10 @@
-# API GENERATOR
+# API CONTAINERIZING
 
 # START
 Go to apiNodejs and run `npm init -y` and `npm install express mysql body-parser --save`<br>
 
 # COMPOSE
-Run `docker-compose up --build -d`
+Run `docker-compose up --build -d` on root folder
 
 # ROUTE
 To see the routes, go to `./apiNodejs/routes/customer.routes.js`
