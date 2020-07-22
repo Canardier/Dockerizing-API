@@ -27,12 +27,16 @@ services:
         build: ./apiNodejs/
         volumes: 
             - ./apiNodejs/:/user/src/app
+        depends_on: 
+            - db
+            - adminer
+        command: ["./wait-for-it.sh", "db:3306", "--", "nodemon", "server.js"]
         ports:
             - '3000:3000'
             - '3001:3360'
         networks: 
             - database
-        restart: on-failure
+        restart: always
 
 networks:
     database:

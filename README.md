@@ -1,7 +1,7 @@
 # API CONTAINERIZING
 
 # START
-Go to apiNodejs and run `npm init -y` and `npm install express mysql body-parser --save`<br>
+Go to apiNodejs and run `npm init -y`, `npm install express mysql body-parser --save` and `npm install -g nodemon`<br>
 
 # COMPOSE
 Run `docker-compose up --build -d` on root folder
