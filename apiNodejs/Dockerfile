@@ -2,10 +2,10 @@ FROM node:10
 
 WORKDIR /user/src/app
 
-RUN npm init -y --save
-RUN npm install express mysql body-parser --save
-RUN npm install -g nodemon --save
+COPY . .
+
 RUN npm install
+RUN npm install -g nodemon
 
 COPY . .
 

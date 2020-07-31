@@ -14,7 +14,7 @@ services:
         networks: 
             - database
         container_name: mysql_db
-    
+
     adminer:
         image: adminer
         restart: on-failure
