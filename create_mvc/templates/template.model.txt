@@ -1,0 +1,108 @@
+const sql = require("./db.js");
+
+// constructor
+const {{ capiName }} = function({{ name }}) { {% for element in content_table %}
+  this.{{ element }} = {{ name }}.{{ element }};{% endfor %}
+};
+
+{{ capiName }}.create = (new{{ capiName }}, result) => {
+  sql.query("INSERT INTO {{ name }} SET ?", new{{ capiName }}, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created {{ capiName }}: ", { id: res.insertId, ...new{{ capiName }} });
+    result(null, { id: res.insertId, ...new{{ capiName }} });
+  });
+};
+
+{{ capiName }}.findById = ({{ name }}Id, result) => {
+  sql.query(`SELECT * FROM {{ name }} WHERE id = ${ {{ name }}Id}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found {{ name }}: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found {{ capiName }} with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+{{ capiName }}.getAll = result => {
+  sql.query("SELECT * FROM {{ name }}", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("{{ name }}s: ", res);
+    result(null, res);
+  });
+};
+
+{{ capiName }}.updateById = (id, {{ name }}, result) => {
+  sql.query(
+    "UPDATE {{ name }} SET {% for element in content_table[1:-1] %}{{ element }} = ?, {% endfor %} {{ content_table[-1] }} = ? WHERE id = ?",
+    [{% for element in content_table[1:] %}{{ name }}.{{ element }}, {% endfor %} id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found {{ capiName }} with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated {{ name }}: ", { id: id, ...{{ name }} });
+      result(null, { id: id, ...{{ name }} });
+    }
+  );
+};
+
+{{ capiName }}.remove = (id, result) => {
+  sql.query("DELETE FROM {{ name }} WHERE id = ?", id, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found {{ capiName }} with the id
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted {{ name }} with id: ", id);
+    result(null, res);
+  });
+};
+
+{{ capiName }}.removeAll = result => {
+  sql.query("DELETE FROM {{ name }}", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log(`deleted ${res.affectedRows} {{ name }}s`);
+    result(null, res);
+  });
+};
+
+module.exports = {{ capiName }};

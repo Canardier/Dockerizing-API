@@ -1,0 +1,21 @@
+module.exports = app => {
+        const {{ name }} = require("../controllers/{{ name }}.controller.js");
+
+        // Create a new {{ capiName }}
+        app.post("/{{ name }}", {{ name }}.create);
+
+        // Retrieve all {{ capiName }}
+        app.get("/{{ name }}", {{ name }}.findAll);
+
+        // Retrieve a single {{ capiName }} with Id
+        app.get("/{{ name }}/:{{ name }}Id", {{ name }}.findOne);
+
+        // Update a {{ capiName }} with Id
+        app.put("/{{ name }}/:{{ name }}Id", {{ name }}.update);
+
+        // Delete a {{ capiName }} with Id
+        app.delete("/{{ name }}/:{{ name }}Id", {{ name }}.delete);
+
+        // Delete all {{ capiName }}
+        app.delete("/{{ name }}", {{ name }}.deleteAll);
+};
