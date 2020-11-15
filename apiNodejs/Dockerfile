@@ -1,14 +1,16 @@
-FROM node:10
+FROM node:10-slim
 
 WORKDIR /user/src/app
 
-COPY . .
-
-RUN npm install
+# Install image dependencies
 RUN npm install -g nodemon
 
+# Install project dependencies
+COPY package.json package-lock.json .
+RUN npm install
+
+# Add project
 COPY . .
 
 EXPOSE 3000
-
 CMD [ "nodemon", "server.js" ]
