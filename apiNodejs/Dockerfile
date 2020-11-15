@@ -6,13 +6,11 @@ WORKDIR /user/src/app
 RUN npm install -g nodemon
 
 # Install project dependencies
-COPY package.json .
-COPY package-lock.json .
+COPY package.json package-lock.json .
 RUN npm install
 
 # Add project
 COPY . .
 
 EXPOSE 3000
-
 CMD [ "nodemon", "server.js" ]
