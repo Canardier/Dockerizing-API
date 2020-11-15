@@ -1,43 +1,45 @@
-version: '3.3'
-
-services:
-    db:
-        build: ./mysqlImage/
-        command: --default-authentication-plugin=mysql_native_password
-        restart: on-failure
-        ports:
-            - "3360:3306"
-        environment: 
-            MYSQL_ROOT_PASSWORD: root
-        volumes:
-        - ./mysql:/var/lib/mysql
-        networks: 
-            - database
-        container_name: mysql_db
-
-    adminer:
-        image: adminer
-        restart: on-failure
-        ports:
-            - "9030:9030"
-        networks: 
-            - database
-
-    nodejs:
-        build: ./apiNodejs/
-        volumes: 
-            - ./apiNodejs/:/user/src/app
-        depends_on: 
-            - db
-            - adminer
-        command: ["./wait-for-it.sh", "db:3306", "--", "nodemon", "server.js"]
-        ports:
-            - '3000:3000'
-            - '3001:3360'
-        networks: 
-            - database
-        restart: always
-
-networks:
-    database:
-        driver: bridge
+--- 
+networks: 
+  database: 
+    driver: bridge
+services: 
+  adminer: 
+    image: adminer
+    networks: 
+      - database
+    ports: 
+      - "9030:9030"
+    restart: on-failure
+  db: 
+    build: ./mysqlImage/
+    command: "--default-authentication-plugin=mysql_native_password"
+    container_name: mysql_db
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+    networks: 
+      - database
+    ports: 
+      - "3360:3306"
+    restart: on-failure
+    volumes: 
+      - "./mysql:/var/lib/mysql"
+  nodejs: 
+    build: ./apiNodejs/
+    command: 
+      - ./wait-for-it.sh
+      - "db:3306"
+      - "--"
+      - nodemon
+      - server.js
+    depends_on: 
+      - db
+      - adminer
+    networks: 
+      - database
+    ports: 
+      - "3000:3000"
+      - "3001:3360"
+    restart: always
+    volumes: 
+      - "./apiNodejs/:/user/src/app"
+version: "3.3"
