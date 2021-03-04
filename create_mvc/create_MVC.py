@@ -8,6 +8,7 @@ def my_create_all():
     migration_path = "./apiNodejs/app/migration"
     files = [f for f in listdir(migration_path) if isfile(join(migration_path, f))]
     files.remove("init-models.js")
+    # print(files)
     for f in files:
         my_object = create_object(migration_path + "/" + f)
         my_object.remove("id")
@@ -15,6 +16,7 @@ def my_create_all():
         create_controller(my_object)
         create_model(my_object)
         create_server()
+    print("Your server is created and running on port 3000 check the localhost:3000 !")
 
 def create_object(file):
     table_line = []
@@ -92,9 +94,15 @@ def create_server():
     content = template.render(route_list=files)
     with open('./apiNodejs/server.js', "w") as fp:
         fp.write(content)
-    print("Your server is created and running on port 3000 check the localhost:3000 !")
 
-# def create_myroad():
-    
+def create_doc(my_object):
+    route_path = "./my_api_doc/"
+    template_path = "./create_mvc/templates/template.my_doc.txt"
+    my_file = open(template_path)
+    template = Template(my_file.read())
+    content = template.render(file=my_object[0], content_table=my_object[1:])
+    print(content)
+    with open('./my_api_doc/doc' + my_object[0] + '.txt', "w") as fp:
+        fp.write(content)
 
 my_create_all()
